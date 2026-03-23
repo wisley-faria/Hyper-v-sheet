@@ -10,17 +10,13 @@ function filterSection(sectionName) {
     event.target.classList.add('active');
 
     // Mostrar/ocultar seções
-    if (sectionName === 'all') {
-        sections.forEach(section => section.classList.remove('hidden'));
-    } else {
-        sections.forEach(section => {
-            if (section.dataset.section === sectionName) {
-                section.classList.remove('hidden');
-            } else if (section.dataset.section) {
-                section.classList.add('hidden');
-            }
-        });
-    }
+    sections.forEach(section => {
+        if (section.dataset.section === sectionName) {
+            section.classList.remove('hidden');
+        } else if (section.dataset.section) {
+            section.classList.add('hidden');
+        }
+    });
 }
 
 // Copiar código ao clicar no bloco de código
