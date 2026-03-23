@@ -2,7 +2,7 @@
 
 Um **Cheat Sheet completo e interativo** sobre Microsoft Hyper-V Failover Cluster com exemplos práticos de PowerShell, configuração passo a passo e troubleshooting.
 
-🌐 **Live Demo**: [https://seu-usuario.github.io/Hyper-v-sheet/](https://wisley-faria.github.io/Hyper-v-sheet/)
+🌐 **Live Demo**: [https://wisley-faria.github.io/Hyper-v-sheet/](https://wisley-faria.github.io/Hyper-v-sheet/)
 
 ---
 
@@ -30,7 +30,7 @@ O site inclui:
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/Hyper-v-sheet.git
+git clone https://wisley-faria.github.io/Hyper-v-sheet/
 cd Hyper-v-sheet
 
 # Abra em um servidor local (Python 3)
