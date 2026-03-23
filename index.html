@@ -18,7 +18,6 @@
         <div class="nav-content">
             <button class="nav-btn active" onclick="filterSection('all')">Todos</button>
             <button class="nav-btn" onclick="filterSection('intro')">Introdução</button>
-            <button class="nav-btn" onclick="filterSection('config')">Configuração</button>
             <button class="nav-btn" onclick="filterSection('powershell')">PowerShell</button>
             <button class="nav-btn" onclick="filterSection('troubleshoot')">Troubleshooting</button>
         </div>
@@ -54,57 +53,6 @@
                     <li>Mesmo domínio Active Directory</li>
                     <li>Hardware compatível (CPU moderno)</li>
                 </ul>
-            </div>
-        </section>
-
-        <!-- Configuração -->
-        <section class="section config" data-section="config">
-            <h2>⚙️ Passo a Passo de Configuração</h2>
-
-            <div class="card">
-                <h3>1. Preparar os Servidores</h3>
-                <pre><code>
-# Instalar Hyper-V (PowerShell Admin)
-Install-WindowsFeature -Name Hyper-V -ComputerName Servidor1,Servidor2 -IncludeManagementTools -Restart
-
-# Instalar Failover Clustering
-Install-WindowsFeature -Name Failover-Clustering -ComputerName Servidor1,Servidor2 -IncludeManagementTools
-                </code></pre>
-            </div>
-
-            <div class="card">
-                <h3>2. Configurar Armazenamento Compartilhado</h3>
-                <ul>
-                    <li>Criar LUN no storage (SAN/iSCSI)</li>
-                    <li>Conectar ambos os servidores ao storage</li>
-                    <li>Inicializar disco no Gerenciador de Disco</li>
-                    <li>Formatar como NTFS ou ReFS</li>
-                </ul>
-            </div>
-
-            <div class="card">
-                <h3>3. Criar o Cluster</h3>
-                <pre><code>
-# Validar cluster
-Test-Cluster -Node Servidor1,Servidor2
-
-# Criar cluster
-New-Cluster -Name MeuCluster -Node Servidor1,Servidor2 -NoStorage
-
-# Adicionar storage ao cluster
-Get-ClusterAvailableResource -Cluster MeuCluster | ?{$_.ResourceType -eq "Physical Disk"} | Add-ClusterResource
-                </code></pre>
-            </div>
-
-            <div class="card">
-                <h3>4. Configurar Roles de Cluster</h3>
-                <pre><code>
-# Adicionar função Hyper-V
-Add-ClusterServerRole -Cluster MeuCluster -NumRoles 1
-
-# Ou via GUI
-# Failover Cluster Manager > Configure Role
-                </code></pre>
             </div>
         </section>
 
@@ -258,55 +206,6 @@ Restart-Service -Name ClusterSvc -ComputerName Servidor2
                     <li>Teste failover regularmente</li>
                     <li>Mantenha logs de cluster para diagnóstico</li>
                 </ul>
-            </div>
-        </section>
-
-        <!-- Tabela de Referência -->
-        <section class="section reference">
-            <h2>📋 Tabela de Referência Rápida</h2>
-            
-            <div class="table-responsive">
-                <table class="reference-table">
-                    <thead>
-                        <tr>
-                            <th>Recurso</th>
-                            <th>Tipo</th>
-                            <th>Descrição</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Quorum</td>
-                            <td>⚙️</td>
-                            <td>Necessário para o cluster funcionar. Maioria dos nós</td>
-                        </tr>
-                        <tr>
-                            <td>Heartbeat</td>
-                            <td>⚙️</td>
-                            <td>Sinais de vida entre nós a cada 1.2 segundos</td>
-                        </tr>
-                        <tr>
-                            <td>CSV</td>
-                            <td>💾</td>
-                            <td>Cluster Shared Volumes - acesso simultâneo ao storage</td>
-                        </tr>
-                        <tr>
-                            <td>Live Migration</td>
-                            <td>🔄</td>
-                            <td>Mover VM sem downtime para outro nó</td>
-                        </tr>
-                        <tr>
-                            <td>RTO</td>
-                            <td>⏱️</td>
-                            <td>Tempo de recuperação: tipicamente < 5 minutos</td>
-                        </tr>
-                        <tr>
-                            <td>RPO</td>
-                            <td>💾</td>
-                            <td>Objetivo de ponto de recuperação: 0 (sem perda)</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </section>
     </main>
