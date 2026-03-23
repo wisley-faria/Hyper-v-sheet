@@ -10,6 +10,7 @@ Um **Cheat Sheet completo e interativo** sobre Microsoft Hyper-V Failover Cluste
 
 O site inclui:
 
+- ⚙️ **Configuração** - Passo a passo para criar um cluster
 - ✅ **Introdução** - Conceitos e requisitos de Hyper-V Cluster
 - ⚡ **PowerShell** - Comandos essenciais e scripts prontos para usar
 - 🔧 **Troubleshooting** - Soluções para problemas comuns
