@@ -2,7 +2,7 @@
 
 Um **Cheat Sheet completo e interativo** sobre Microsoft Hyper-V Failover Cluster com exemplos práticos de PowerShell, configuração passo a passo e troubleshooting.
 
-🌐 **Live Demo**: [https://seu-usuario.github.io/Hyper-v-sheet/](https://seu-usuario.github.io/Hyper-v-sheet/)
+🌐 **Live Demo**: [https://seu-usuario.github.io/Hyper-v-sheet/](https://wisley-faria.github.io/Hyper-v-sheet/)
 
 ---
 
@@ -132,8 +132,8 @@ Este projeto está licenciado sob a **MIT License** - veja o arquivo [LICENSE](L
 
 Encontrou um erro ou tem dúvidas?
 
-- 🐛 [Abra uma Issue](https://github.com/seu-usuario/Hyper-v-sheet/issues)
-- 💬 [Discussões](https://github.com/seu-usuario/Hyper-v-sheet/discussions)
+- 🐛 [Abra uma Issue](https://github.com/wisley-faria/Hyper-v-sheet/issues)
+- 💬 [Discussões](https://github.com/wisley-faria/Hyper-v-sheet/discussions)
 - 📧 Entre em contato
 
 ---
