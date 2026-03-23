@@ -1,0 +1,22 @@
+# GitHub Pages Configuration
+theme: null
+markdown: kramdown
+
+# Site configuration
+title: Hyper-V Failover Cluster - Cheat Sheet
+description: Guia completo e interativo sobre Microsoft Hyper-V Failover Cluster
+author: WIsley Faria
+url: "https://wisley-faria.github.io/Hyper-v-sheet"
+
+# Build settings
+exclude:
+  - .gitignore
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - LICENSE
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-feed

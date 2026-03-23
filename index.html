@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyper-V Failover Cluster - Cheat Sheet</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>🖥️ Hyper-V Failover Cluster</h1>
+            <p class="subtitle">Cheat Sheet Completo</p>
+        </div>
+    </header>
+
+    <nav class="navbar">
+        <div class="nav-content">
+            <button class="nav-btn active" onclick="filterSection('all')">Todos</button>
+            <button class="nav-btn" onclick="filterSection('intro')">Introdução</button>
+            <button class="nav-btn" onclick="filterSection('config')">Configuração</button>
+            <button class="nav-btn" onclick="filterSection('powershell')">PowerShell</button>
+            <button class="nav-btn" onclick="filterSection('troubleshoot')">Troubleshooting</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Introdução -->
+        <section class="section intro" data-section="intro">
+            <h2>📚 Introdução ao Hyper-V Failover Cluster</h2>
+            
+            <div class="card">
+                <h3>O que é?</h3>
+                <p>Um Hyper-V Failover Cluster é um grupo de computadores independentes que trabalham juntos para aumentar a disponibilidade de máquinas virtuais e serviços. Se um nó falhar, outro nó assume automaticamente as VMs.</p>
+            </div>
+
+            <div class="card">
+                <h3>Componentes Principais</h3>
+                <ul>
+                    <li><strong>Nodes:</strong> Servidores Hyper-V que formam o cluster</li>
+                    <li><strong>Shared Storage:</strong> Armazenamento compartilhado (SAN, iSCSI)</li>
+                    <li><strong>Network:</strong> Rede dedicada para heartbeat e sincronização</li>
+                    <li><strong>Failover:</strong> Migração automática de VMs entre nós</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Requisitos</h3>
+                <ul>
+                    <li>Windows Server 2016 ou superior</li>
+                    <li>Hyper-V habilitado em todos os nós</li>
+                    <li>Armazenamento compartilhado</li>
+                    <li>Conexão de rede dedicada para cluster</li>
+                    <li>Mesmo domínio Active Directory</li>
+                    <li>Hardware compatível (CPU moderno)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Configuração -->
+        <section class="section config" data-section="config">
+            <h2>⚙️ Passo a Passo de Configuração</h2>
+
+            <div class="card">
+                <h3>1. Preparar os Servidores</h3>
+                <pre><code>
+# Instalar Hyper-V (PowerShell Admin)
+Install-WindowsFeature -Name Hyper-V -ComputerName Servidor1,Servidor2 -IncludeManagementTools -Restart
+
+# Instalar Failover Clustering
+Install-WindowsFeature -Name Failover-Clustering -ComputerName Servidor1,Servidor2 -IncludeManagementTools
+                </code></pre>
+            </div>
+
+            <div class="card">
+                <h3>2. Configurar Armazenamento Compartilhado</h3>
+                <ul>
+                    <li>Criar LUN no storage (SAN/iSCSI)</li>
+                    <li>Conectar ambos os servidores ao storage</li>
+                    <li>Inicializar disco no Gerenciador de Disco</li>
+                    <li>Formatar como NTFS ou ReFS</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>3. Criar o Cluster</h3>
+                <pre><code>
+# Validar cluster
+Test-Cluster -Node Servidor1,Servidor2
+
+# Criar cluster
+New-Cluster -Name MeuCluster -Node Servidor1,Servidor2 -NoStorage
+
+# Adicionar storage ao cluster
+Get-ClusterAvailableResource -Cluster MeuCluster | ?{$_.ResourceType -eq "Physical Disk"} | Add-ClusterResource
+                </code></pre>
+            </div>
+
+            <div class="card">
+                <h3>4. Configurar Roles de Cluster</h3>
+                <pre><code>
+# Adicionar função Hyper-V
+Add-ClusterServerRole -Cluster MeuCluster -NumRoles 1
+
+# Ou via GUI
+# Failover Cluster Manager > Configure Role
+                </code></pre>
+            </div>
+        </section>
+
+        <!-- PowerShell Commands -->
+        <section class="section powershell" data-section="powershell">
+            <h2>⚡ Comandos PowerShell Essenciais</h2>
+
+            <div class="card">
+                <h3>Gerenciamento de Cluster</h3>
+                <pre><code>
+# Ver informações do cluster
+Get-Cluster
+
+# Listar nós do cluster
+Get-ClusterNode
+
+# Ver status dos nós
+Get-ClusterNode | Select Name,State
+
+# Adicionar nó ao cluster
+Add-ClusterNode -Name Servidor3 -Cluster MeuCluster
+
+# Remover nó do cluster
+Remove-ClusterNode -Name Servidor3
+                </code></pre>
+            </div>
+
+            <div class="card">
+                <h3>Gerenciamento de Máquinas Virtuais</h3>
+                <pre><code>
+# Listar VMs no cluster
+Get-ClusterResource -ResourceType "Virtual Machine"
+
+# Mover VM para outro nó
+Move-ClusterVirtualMachineRole -Name MinhaVM -Node Servidor2
+
+# Live Migration
+Move-VM -Name MinhaVM -DestinationHost Servidor2
+
+# Criar VM de alta disponibilidade
+New-VM -Name NovaVM -MemoryStartupBytes 4GB -Path "C:\ClusterStorage\Volume1\NovaVM"
+Add-ClusterVirtualMachineRole -VirtualMachineObject (Get-VM -Name NovaVM)
+                </code></pre>
+            </div>
+
+            <div class="card">
+                <h3>Armazenamento em Cluster</h3>
+                <pre><code>
+# Listar discos do cluster
+Get-ClusterSharedVolume
+
+# Listar recursos de armazenamento
+Get-ClusterResource -ResourceType "Physical Disk"
+
+# Ver espaço em disco
+Get-Volume
+
+# Adicionar novo disco
+Add-ClusterDisk -InputObject (Get-Disk -Number 2)
+                </code></pre>
+            </div>
+
+            <div class="card">
+                <h3>Rede do Cluster</h3>
+                <pre><code>
+# Listar redes do cluster
+Get-ClusterNetwork
+
+# Configurar rede para cluster e live migration
+Set-ClusterNetwork -Name "Rede1" -Role ClusterAndClient
+
+# Listar adaptadores de rede
+Get-ClusterNetworkInterface
+                </code></pre>
+            </div>
+
+            <div class="card">
+                <h3>Monitoring e Diagnóstico</h3>
+                <pre><code>
+# Ver eventos do cluster
+Get-ClusterLog -Destination C:\temp\
+
+# Validar saúde do cluster
+Test-Cluster
+
+# Ver métricas de performance
+Get-ClusterNode | Get-ClusterResourceHistoryInfo
+
+# Check heartbeat status
+(Get-ClusterNode).NodeHighestVersion
+                </code></pre>
+            </div>
+        </section>
+
+        <!-- Troubleshooting -->
+        <section class="section troubleshoot" data-section="troubleshoot">
+            <h2>🔧 Troubleshooting Comum</h2>
+
+            <div class="card alert-danger">
+                <h3>❌ Cluster não forma</h3>
+                <p><strong>Causa:</strong> Diferenças de versão, conectividade de rede, firewall</p>
+                <pre><code>
+# Verificar versão do Windows
+Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' | Select CurrentVersion
+
+# Testar conectividade
+Test-NetConnection -ComputerName Servidor2 -Port 5985
+
+# Verificar firewall
+Get-NetFirewallRule -DisplayName "*Cluster*" | Select Name,Enabled
+                </code></pre>
+            </div>
+
+            <div class="card alert-danger">
+                <h3>❌ VM não faz failover</h3>
+                <p><strong>Causa:</strong> Storage não acessível, VM não configurada como HA</p>
+                <pre><code>
+# Verificar se VM está em resourse group
+Get-ClusterGroup
+
+# Testar acesso ao storage de ambos nós
+Get-ClusterSharedVolume | Select Name,State
+
+# Verificar espaço em disco
+Get-Volume
+                </code></pre>
+            </div>
+
+            <div class="card alert-danger">
+                <h3>❌ Nó desconectado do cluster</h3>
+                <p><strong>Causa:</strong> Problema de rede, heartbeat falha</p>
+                <pre><code>
+# Ver status do nó
+Get-ClusterNode -Name Servidor2 | Select State
+
+# Forçar sincronização
+(Get-ClusterNode -Name Servidor2).NodeHighestVersion
+
+# Reiniciar serviço de cluster
+Restart-Service -Name ClusterSvc -ComputerName Servidor2
+                </code></pre>
+            </div>
+
+            <div class="card alert-warning">
+                <h3>⚠️ Dicas Importantes</h3>
+                <ul>
+                    <li>Sempre use <strong>Live Migration</strong> em vez de reinicializar nós</li>
+                    <li>Configure <strong>VM Monitoring</strong> para restart automático</li>
+                    <li>Mantenha <strong>quorum</strong> adequado (maioria dos nós online)</li>
+                    <li>Use <strong>Cluster Shared Volumes (CSV)</strong> para melhor performance</li>
+                    <li>Teste failover regularmente</li>
+                    <li>Mantenha logs de cluster para diagnóstico</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Tabela de Referência -->
+        <section class="section reference">
+            <h2>📋 Tabela de Referência Rápida</h2>
+            
+            <div class="table-responsive">
+                <table class="reference-table">
+                    <thead>
+                        <tr>
+                            <th>Recurso</th>
+                            <th>Tipo</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Quorum</td>
+                            <td>⚙️</td>
+                            <td>Necessário para o cluster funcionar. Maioria dos nós</td>
+                        </tr>
+                        <tr>
+                            <td>Heartbeat</td>
+                            <td>⚙️</td>
+                            <td>Sinais de vida entre nós a cada 1.2 segundos</td>
+                        </tr>
+                        <tr>
+                            <td>CSV</td>
+                            <td>💾</td>
+                            <td>Cluster Shared Volumes - acesso simultâneo ao storage</td>
+                        </tr>
+                        <tr>
+                            <td>Live Migration</td>
+                            <td>🔄</td>
+                            <td>Mover VM sem downtime para outro nó</td>
+                        </tr>
+                        <tr>
+                            <td>RTO</td>
+                            <td>⏱️</td>
+                            <td>Tempo de recuperação: tipicamente < 5 minutos</td>
+                        </tr>
+                        <tr>
+                            <td>RPO</td>
+                            <td>💾</td>
+                            <td>Objetivo de ponto de recuperação: 0 (sem perda)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Hyper-V Failover Cluster Cheat Sheet | Atualizado em 2026</p>
+        <p><a href="https://github.com" target="_blank">📌 GitHub</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
