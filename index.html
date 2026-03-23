@@ -24,38 +24,6 @@
     </nav>
 
     <main class="container">
-        <!-- Introdução -->
-        <section class="section intro" data-section="intro">
-            <h2>📚 Introdução ao Hyper-V Failover Cluster</h2>
-            
-            <div class="card">
-                <h3>O que é?</h3>
-                <p>Um Hyper-V Failover Cluster é um grupo de computadores independentes que trabalham juntos para aumentar a disponibilidade de máquinas virtuais e serviços. Se um nó falhar, outro nó assume automaticamente as VMs.</p>
-            </div>
-
-            <div class="card">
-                <h3>Componentes Principais</h3>
-                <ul>
-                    <li><strong>Nodes:</strong> Servidores Hyper-V que formam o cluster</li>
-                    <li><strong>Shared Storage:</strong> Armazenamento compartilhado (SAN, iSCSI)</li>
-                    <li><strong>Network:</strong> Rede dedicada para heartbeat e sincronização</li>
-                    <li><strong>Failover:</strong> Migração automática de VMs entre nós</li>
-                </ul>
-            </div>
-
-            <div class="card">
-                <h3>Requisitos</h3>
-                <ul>
-                    <li>Windows Server 2016 ou superior</li>
-                    <li>Hyper-V habilitado em todos os nós</li>
-                    <li>Armazenamento compartilhado</li>
-                    <li>Conexão de rede dedicada para cluster</li>
-                    <li>Mesmo domínio Active Directory</li>
-                    <li>Hardware compatível (CPU moderno)</li>
-                </ul>
-            </div>
-        </section>
-
         <!-- Configuração -->
         <section class="section config" data-section="config">
             <h2>⚙️ Passo a Passo de Configuração</h2>
@@ -104,6 +72,38 @@ Add-ClusterServerRole -Cluster MeuCluster -NumRoles 1
 # Ou via GUI
 # Failover Cluster Manager > Configure Role
                 </code></pre>
+            </div>
+        </section>
+
+        <!-- Introdução -->
+        <section class="section intro" data-section="intro">
+            <h2>📚 Introdução ao Hyper-V Failover Cluster</h2>
+            
+            <div class="card">
+                <h3>O que é?</h3>
+                <p>Um Hyper-V Failover Cluster é um grupo de computadores independentes que trabalham juntos para aumentar a disponibilidade de máquinas virtuais e serviços. Se um nó falhar, outro nó assume automaticamente as VMs.</p>
+            </div>
+
+            <div class="card">
+                <h3>Componentes Principais</h3>
+                <ul>
+                    <li><strong>Nodes:</strong> Servidores Hyper-V que formam o cluster</li>
+                    <li><strong>Shared Storage:</strong> Armazenamento compartilhado (SAN, iSCSI)</li>
+                    <li><strong>Network:</strong> Rede dedicada para heartbeat e sincronização</li>
+                    <li><strong>Failover:</strong> Migração automática de VMs entre nós</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Requisitos</h3>
+                <ul>
+                    <li>Windows Server 2016 ou superior</li>
+                    <li>Hyper-V habilitado em todos os nós</li>
+                    <li>Armazenamento compartilhado</li>
+                    <li>Conexão de rede dedicada para cluster</li>
+                    <li>Mesmo domínio Active Directory</li>
+                    <li>Hardware compatível (CPU moderno)</li>
+                </ul>
             </div>
         </section>
 
